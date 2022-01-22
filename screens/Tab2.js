@@ -1,10 +1,16 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet } from "react-native";
 
 const Tab2 = (props) => {
   return (
     <View style={styles.screen}>
       <Text>Tab 2</Text>
+      <Button
+        title="Tab1"
+        onPress={() => {
+          props.navigation.navigate("Tab1");
+        }}
+      />
     </View>
   );
 };
