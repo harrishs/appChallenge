@@ -11,10 +11,11 @@ import HeaderButton from "./components/HeaderButton";
 
 import Styling from "./constants/Styling";
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [drawer, setDrawer] = React.useState(false);
   const headerStyle = {
     headerStyle: {
       backgroundColor: Styling.primaryColor,
@@ -26,7 +27,7 @@ export default function App() {
           title="headerBtn"
           iconName="notifications-outline"
           onPress={() => {
-            console.log("open the sidebar");
+            setDrawer((prevState) => !prevState);
           }}
         />
       </HeaderButtons>
@@ -41,51 +42,39 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Tab1"
-          component={Tab1}
-          options={{
-            headerTitle: "Tab1",
-            ...tabStyle,
-          }}
-        />
-        <Tab.Screen
-          name="Tab2"
-          component={Tab2}
-          options={{
-            headerTitle: "Tab2",
-            ...tabStyle,
-          }}
-        />
-      </Tab.Navigator>
-      {/* <Stack.Navigator>
-        <Stack.Screen
-          name="Tab1"
-          component={Tab1}
-          options={{
-            headerTitle: "Tab1",
-            ...headerStyle,
-          }}
-        />
-        <Stack.Screen
-          name="Tab2"
-          component={Tab2}
-          options={{
-            headerTitle: "Tab2",
-            ...headerStyle,
-          }}
-        />
-        <Stack.Screen
-          name="Joke"
-          component={Joke}
-          options={{
-            headerTitle: "View Joke",
-            ...headerStyle,
-          }}
-        />
-      </Stack.Navigator> */}
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        {/* <Stack.Navigator>
+          <Stack.Screen
+            name="Joke"
+            component={Joke}
+            options={{
+              headerTitle: "View Joke",
+              ...headerStyle,
+            }}
+          />
+        </Stack.Navigator> */}
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Tab1"
+            component={Tab1}
+            options={{
+              headerTitle: "Tab1",
+              ...tabStyle,
+              ...headerStyle,
+            }}
+          />
+          <Tab.Screen
+            name="Tab2"
+            component={Tab2}
+            options={{
+              headerTitle: "Tab2",
+              ...tabStyle,
+              ...headerStyle,
+            }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </>
   );
 }

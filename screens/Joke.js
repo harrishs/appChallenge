@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import Layout from "../components/Layout";
 
 const dummyData = {
   error: false,
@@ -21,9 +22,11 @@ const dummyData = {
 
 const Joke = (props) => {
   return (
-    <View style={styles.screen}>
-      <Text>{dummyData.joke}</Text>
-    </View>
+    <Layout>
+      <View style={styles.screen}>
+        <Text>{dummyData.joke}</Text>
+      </View>
+    </Layout>
   );
 };
 
