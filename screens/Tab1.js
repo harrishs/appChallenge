@@ -1,7 +1,5 @@
 import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import HeaderButton from "../components/HeaderButton";
 
 const Tab1 = (props) => {
   return (
@@ -10,7 +8,7 @@ const Tab1 = (props) => {
       <Button
         title="Tab2"
         onPress={() => {
-          props.navigation.navigate("Joke");
+          props.navigation.navigate("Tab2");
         }}
       />
     </View>
