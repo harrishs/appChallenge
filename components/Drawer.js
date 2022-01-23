@@ -1,7 +1,6 @@
 import * as React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Button, StyleSheet } from "react-native";
 import { JokeContext } from "../App";
-import * as Notifications from "expo-notifications";
 
 import Styling from "../constants/Styling";
 
@@ -17,16 +16,19 @@ const Drawer = (props) => {
             .then((data) => {
               const newObj = { drawer: joke.drawer, joke: data };
               setJoke(newObj);
-              const setup =
-                joke.type == "single" ? "Continue For Joke" : joke.setup;
-              Notifications.scheduleNotificationAsync({
-                content: {
-                  title: setup,
-                  body: "Joke",
+              const title = data.setup ? data.setup : "Press For Joke";
+              const body = JSON.stringify({
+                to: joke.token,
+                title,
+              });
+              fetch("https://exp.host/--/api/v2/push/send", {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Accept-Encoding": "gzip, deflate",
+                  "Content-Type": "application/json",
                 },
-                trigger: {
-                  seconds: 1,
-                },
+                body,
               });
             })
             .catch((err) => console.log(err));

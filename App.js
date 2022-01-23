@@ -30,6 +30,7 @@ export default function App() {
   const [joke, setJoke] = React.useState({
     joke: null,
     drawer: false,
+    token: null,
   });
   const headerStyle = {
     headerStyle: {
@@ -75,7 +76,34 @@ export default function App() {
           return statusObj;
         }
       })
-      .then((statusObj) => console.log(statusObj));
+      .then((statusObj) => {
+        if (statusObj.granted != true) {
+          throw new Error("Notification Permissions Not Granted");
+        }
+      })
+      .then(() => {
+        return Notifications.getExpoPushTokenAsync();
+      })
+      .then((data) => {
+        const token = data.data;
+        setJoke((prevState) => ({
+          ...prevState,
+          token,
+        }));
+      })
+      .catch((err) => console.log(err));
+    const bgSub = Notifications.addNotificationResponseReceivedListener(
+      (response) => console.log(response)
+    );
+
+    const fgSub = Notifications.addNotificationReceivedListener(
+      (notification) => console.log(notification)
+    );
+
+    return () => {
+      fgSub.remove();
+      bgSub.remove();
+    };
   });
 
   return (
