@@ -1,15 +1,23 @@
 import * as React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
+import { JokeContext } from "../App";
 
 import Styling from "../constants/Styling";
 
 const Drawer = (props) => {
+  const [joke, setJoke] = React.useContext(JokeContext);
   return (
     <View style={styles.drawer}>
       <Button
         title="Show Me A Joke"
         onPress={() => {
-          props.navigation.navigate("Joke");
+          fetch("https://v2.jokeapi.dev/joke/Any")
+            .then((response) => response.json())
+            .then((data) => {
+              const newObj = { drawer: joke.drawer, joke: data };
+              setJoke(newObj);
+            })
+            .catch((err) => console.log(err));
         }}
       />
     </View>
