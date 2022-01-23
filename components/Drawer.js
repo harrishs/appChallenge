@@ -1,6 +1,7 @@
 import * as React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { JokeContext } from "../App";
+import * as Notifications from "expo-notifications";
 
 import Styling from "../constants/Styling";
 
@@ -16,6 +17,17 @@ const Drawer = (props) => {
             .then((data) => {
               const newObj = { drawer: joke.drawer, joke: data };
               setJoke(newObj);
+              const setup =
+                joke.type == "single" ? "Continue For Joke" : joke.setup;
+              Notifications.scheduleNotificationAsync({
+                content: {
+                  title: setup,
+                  body: "Joke",
+                },
+                trigger: {
+                  seconds: 1,
+                },
+              });
             })
             .catch((err) => console.log(err));
         }}

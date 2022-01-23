@@ -8,12 +8,23 @@ import Joke from "./screens/Joke";
 import { Ionicons } from "@expo/vector-icons";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "./components/HeaderButton";
+import { LogBox } from "react-native";
+import * as Notifications from "expo-notifications";
 
 import Styling from "./constants/Styling";
 
 // const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 export const JokeContext = React.createContext();
+LogBox.ignoreLogs(["Require cycle:"]);
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+    };
+  },
+});
 
 export default function App() {
   const [joke, setJoke] = React.useState({
@@ -47,6 +58,25 @@ export default function App() {
       <Ionicons name="ios-star" color={color} size={24} />
     ),
   };
+
+  React.useEffect(() => {
+    Notifications.getPermissionsAsync()
+      .then(async (statusObj) => {
+        if (statusObj.granted != true) {
+          return await Notifications.requestPermissionsAsync({
+            ios: {
+              allowAlert: true,
+              allowBadge: true,
+              allowSound: true,
+              allowsAnnouncements: true,
+            },
+          });
+        } else {
+          return statusObj;
+        }
+      })
+      .then((statusObj) => console.log(statusObj));
+  });
 
   return (
     <>
