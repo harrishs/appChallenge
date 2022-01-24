@@ -1,6 +1,5 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Tab1 from "./screens/Tab1";
 import Tab2 from "./screens/Tab2";
@@ -12,8 +11,9 @@ import { LogBox } from "react-native";
 import * as Notifications from "expo-notifications";
 
 import Styling from "./constants/Styling";
+import { setNotificationHandler } from "expo-notifications";
+import { PureComponent } from "react/cjs/react.production.min";
 
-// const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 export const JokeContext = React.createContext();
 LogBox.ignoreLogs(["Require cycle:"]);
@@ -31,7 +31,9 @@ export default function App() {
     joke: null,
     drawer: false,
     token: null,
+    navigate: false,
   });
+  const [notif, setNotif] = React.useState(null);
   const headerStyle = {
     headerStyle: {
       backgroundColor: Styling.primaryColor,
@@ -86,41 +88,49 @@ export default function App() {
       })
       .then((data) => {
         const token = data.data;
-        setJoke((prevState) => ({
-          ...prevState,
+        const newObj = {
+          ...joke,
           token,
-        }));
+        };
+        setJoke(newObj);
       })
       .catch((err) => console.log(err));
+
     const bgSub = Notifications.addNotificationResponseReceivedListener(
-      (response) => console.log(response)
+      (response) => {
+        console.log(response);
+      }
     );
 
     const fgSub = Notifications.addNotificationReceivedListener(
-      (notification) => console.log(notification)
+      (notification) => {
+        const newObj = {
+          ...joke,
+          navigate: !joke.navigate,
+        };
+        setJoke(newObj);
+      }
     );
 
     return () => {
       fgSub.remove();
       bgSub.remove();
     };
-  });
+  }, []);
 
   return (
     <>
       <JokeContext.Provider value={[joke, setJoke]}>
         <NavigationContainer>
-          {/* <Stack.Navigator>
-          <Stack.Screen
-            name="Joke"
-            component={Joke}
-            options={{
-              headerTitle: "View Joke",
-              ...headerStyle,
-            }}
-          />
-        </Stack.Navigator> */}
-          <Tab.Navigator>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarButton: ["Joke"].includes(route.name)
+                ? () => {
+                    return null;
+                  }
+                : undefined,
+            })}
+          >
             <Tab.Screen
               name="Tab1"
               component={Tab1}
@@ -136,6 +146,14 @@ export default function App() {
               options={{
                 headerTitle: "Tab2",
                 ...tabStyle,
+                ...headerStyle,
+              }}
+            />
+            <Tab.Screen
+              name="Joke"
+              component={Joke}
+              options={{
+                headerTitle: "View Joke",
                 ...headerStyle,
               }}
             />

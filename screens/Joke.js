@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Layout from "../components/Layout";
+import { JokeContext } from "../App";
 
 const dummyData = {
   error: false,
@@ -21,12 +21,14 @@ const dummyData = {
 };
 
 const Joke = (props) => {
+  const [joke] = React.useContext(JokeContext);
+
+  console.log(joke);
+
   return (
-    <Layout>
-      <View style={styles.screen}>
-        <Text>{dummyData.joke}</Text>
-      </View>
-    </Layout>
+    <View style={styles.screen}>
+      <Text>{joke.joke}</Text>
+    </View>
   );
 };
 

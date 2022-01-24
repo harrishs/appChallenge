@@ -1,20 +1,26 @@
 import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import Layout from "../components/Layout";
+import { JokeContext } from "../App";
+import Drawer from "../components/Drawer";
 
 const Tab1 = (props) => {
+  const [joke] = React.useContext(JokeContext);
+
+  if (joke.navigate == true) {
+    props.navigation.navigate("Joke");
+  }
+
   return (
-    <Layout>
-      <View style={styles.screen}>
-        <Text>Tab 1</Text>
-        <Button
-          title="Tab2"
-          onPress={() => {
-            props.navigation.navigate("Tab2");
-          }}
-        />
-      </View>
-    </Layout>
+    <View>
+      {joke.drawer ? <Drawer /> : null}
+      <Text>Tab 1</Text>
+      <Button
+        title="Tab2"
+        onPress={() => {
+          props.navigation.navigate("Tab2");
+        }}
+      />
+    </View>
   );
 };
 
