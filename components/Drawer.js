@@ -14,9 +14,20 @@ const Drawer = (props) => {
           fetch("https://v2.jokeapi.dev/joke/Any")
             .then((response) => response.json())
             .then((data) => {
-              const newObj = { drawer: joke.drawer, joke: data };
-              setJoke(newObj);
+              const jk = {
+                joke: data.joke,
+                type: data.type,
+                setup: data.setup,
+                delivery: data.delivery,
+              };
+              setJoke({
+                ...joke,
+                joke: data.joke,
+                setup: data.setup,
+                delivery: data.delivery,
+              });
               const title = data.setup ? data.setup : "Press For Joke";
+              console.log(joke);
               const body = JSON.stringify({
                 to: joke.token,
                 title,

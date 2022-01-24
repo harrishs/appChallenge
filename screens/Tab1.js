@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { JokeContext } from "../App";
 import Drawer from "../components/Drawer";
@@ -6,9 +6,11 @@ import Drawer from "../components/Drawer";
 const Tab1 = (props) => {
   const [joke] = React.useContext(JokeContext);
 
-  if (joke.navigate == true) {
-    props.navigation.navigate("Joke");
-  }
+  React.useEffect(() => {
+    if (joke.navigate == true) {
+      props.navigation.navigate("Joke");
+    }
+  });
 
   return (
     <View>
